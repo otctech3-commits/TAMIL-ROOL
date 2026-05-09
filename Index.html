@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MK TV</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Lato', sans-serif;
+  background:#000;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* Animated Grid Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(244, 117, 33, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 117, 33, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: moveGrid 25s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+@keyframes moveGrid {
+  0% { background-position: 0 0; }
+  100% { background-position: 60px 60px; }
+}
+
+/* NAVBAR */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 20px;
+  background:#23252b;
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid #141519;
+}
+.logo{
+  color:#f47521;
+  font-weight:900;
+  font-size:22px;
+  letter-spacing:0.5px;
+}
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.search{
+  padding:10px 16px;
+  border-radius:4px;
+  border:2px solid #141519;
+  background:#141519;
+  color:#fff;
+  font-size:14px;
+  width:0;
+  opacity:0;
+  transition:0.3s;
+  pointer-events:none;
+}
+.search.active{
+  width:200px;
+  opacity:1;
+  pointer-events:all;
+}
+.search:focus{
+  outline:none;
+  border-color:#f47521;
+}
+.search-icon{
+  font-size:20px;
+  cursor:pointer;
+  padding:8px;
+  border-radius:4px;
+  transition:0.2s;
+}
+.search-icon:hover{background:#141519;}
+
+/* HERO CAROUSEL */
+.hero{
+  position:relative;
+  height:55vh;
+  min-height:400px;
+  overflow:hidden;
+  z-index:1;
+}
+.hero-slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity 0.8s ease;
+}
+.hero-slide.active{
+  opacity:1;
+}
+.hero-slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.hero-gradient{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, #000 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.3) 70%, transparent 100%);
+}
+.hero-content{
+  position:absolute;
+  bottom:50px;
+  left:0;
+  right:0;
+  padding:0 20px;
+  max-width:1200px;
+  margin:0 auto;
+}
+.hero-title{
+  font-size:38px;
+  font-weight:900;
+  margin:0 0 12px 0;
+  line-height:1.1;
+}
+.hero-desc{
+  font-size:16px;
+  color:#dadada;
+  margin:0 0 20px 0;
+  max-width:600px;
+  line-height:1.5;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.hero-buttons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.hero-btn{
+  padding:14px 28px;
+  background:#f47521;
+  border:none;
+  border-radius:4px;
+  color:#000;
+  font-weight:900;
+  font-size:15px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:0.2s;
+}
+.hero-btn:hover{background:#ff8c42;}
+.hero-btn-secondary{
+  background:rgba(35,37,43,0.8);
+  color:#fff;
+  border:2px solid #4a4e58;
+}
+.hero-btn-secondary:hover{background:rgba(35,37,43,1);}
+
+/* HERO DOTS */
+.hero-dots{
+  position:absolute;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+  z-index:5;
+}
+.hero-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.4);
+  cursor:pointer;
+  transition:0.3s;
+}
+.hero-dot.active{
+  background:#f47521;
+  width:30px;
+  border-radius:5px;
+}
+
+/* ROWS */
+.row{
+  padding:30px 20px 10px 20px;
+  position:relative;
+  z-index:1;
+  max-width:1400px;
+  margin:0 auto;
+}
+.row-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+.row h3{
+  margin:0;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:0.3px;
+}
+.view-all{
+  color:#a0a0a0;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+}
+.view-all:hover{color:#f47521;}
+.scroll{
+  display:flex;
+  overflow-x:auto;
+  gap:12px;
+  padding-bottom:15px;
+  scroll-behavior:smooth;
+}
+.scroll::-webkit-scrollbar{height:6px;}
+.scroll::-webkit-scrollbar-track{background:#141519;border-radius:10px;}
+.scroll::-webkit-scrollbar-thumb{background:#4a4e58;border-radius:10px;}
+.scroll::-webkit-scrollbar-thumb:hover{background:#f47521;}
+
+/* CARDS */
+.card{
+  min-width:180px;
+  background:#141519;
+  border-radius:4px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+  position:relative;
+}
+.card:hover{
+  transform:scale(1.05);
+  z-index:10;
+}
+.card img{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+  display:block;
+}
+.card-content{
+  padding:10px;
+}
+.card-title{
+  font-size:14px;
+  font-weight:700;
+  line-height:1.3;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  color:#fff;
+}
+.card-meta{
+  font-size:12px;
+  color:#a0a0a0;
+  margin-top:5px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:15px;
+  padding:20px;
+  max-width:1400px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+
+/* AD POPUP */
+.ad-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.96);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  padding:20px;
+}
+.ad-box{
+  width:100%;
+  max-width:450px;
+  background:#23252b;
+  border-radius:6px;
+  overflow:hidden;
+}
+.ad-header{
+  background:#f47521;
+  color:#000;
+  padding:14px;
+  text-align:center;
+  font-weight:900;
+  font-size:14px;
+  letter-spacing:1px;
+}
+.ad-box img,.ad-box video{
+  width:100%;
+  display:block;
+}
+.ad-footer{
+  padding:20px;
+  text-align:center;
+}
+#count{
+  color:#dadada;
+  margin:0 0 15px 0;
+  font-size:15px;
+  font-weight:600;
+}
+.close{
+  width:100%;
+  padding:16px;
+  background:#f47521;
+  border:none;
+  color:#000;
+  font-weight:900;
+  font-size:16px;
+  border-radius:4px;
+  cursor:pointer;
+  display:none;
+}
+.close:disabled{
+  background:#4a4e58;
+  color:#a0a0a0;
+  cursor:not-allowed;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+.search.active{width:150px;}
+.hero{height:50vh;min-height:350px;}
+.hero-title{font-size:28px;}
+.hero-desc{-webkit-line-clamp:3;}
+.hero-content{bottom:60px;}
+.card{min-width:140px;}
+.card img{height:200px;}
+.grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+.row{padding:25px 15px 5px 15px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <div class="logo">MK TV</div>
+  <div class="nav-right">
+    <input class="search" id="search" placeholder="Search anime, series...">
+    <div class="search-icon" onclick="toggleSearch()">🔍</div>
+  </div>
+</div>
+
+<!-- HERO CAROUSEL -->
+<div class="hero" id="hero">
+  <div class="hero-dots" id="heroDots"></div>
+</div>
+
+<!-- ANIME ROW -->
+<div class="row">
+  <div class="row-header">
+    <h3>Anime</h3>
+    <div class="view-all" onclick="scrollToGrid()">VIEW ALL</div>
+  </div>
+  <div class="scroll" id="animeRow"></div>
+</div>
+
+<!-- MOVIE ROW -->
+<div class="row">
+  <div class="row-header">
+    <h3>Movie</h3>
+    <div class="view-all" onclick="scrollToGrid()">VIEW ALL</div>
+  </div>
+  <div class="scroll" id="movieRow"></div>
+</div>
+
+<!-- SERIES ROW -->
+<div class="row">
+  <div class="row-header">
+    <h3>Series</h3>
+    <div class="view-all" onclick="scrollToGrid()">VIEW ALL</div>
+  </div>
+  <div class="scroll" id="seriesRow"></div>
+</div>
+
+<!-- GRID -->
+<div class="grid" id="posts"></div>
+
+<!-- AD -->
+<div class="ad-popup" id="adPopup">
+  <div class="ad-box">
+    <div class="ad-header">ADVERTISEMENT</div>
+    <img id="adImg" src="https://i.ibb.co/rRnwx4sc/IMG-20260408-181100.jpg" onclick="window.open('https://tamil-rool.blogspot.com','_blank')">
+    <div class="ad-footer">
+      <p id="count">Please wait 15s</p>
+      <button class="close" id="closeBtn">CONTINUE TO CONTENT</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const blog="https://Tamil-rool-home.blogspot.com";
+let posts=[];
+let heroSlides=[];
+let currentSlide=0;
+let slideInterval;
+
+/* LOAD POSTS */
+function loadPosts(data){
+ let entries=data.feed.entry;
+ if(!entries) return;
+
+ posts=entries.map(e=>{
+   let title=e.title.$t;
+   let link=e.link.find(l=>l.rel=="alternate").href;
+   let img="";
+   if(e.media$thumbnail){
+     img=e.media$thumbnail.url.replace("s72-c","s800");
+   }else{
+     let m=e.content.$t.match(/<img.*?src="(.*?)"/);
+     if(m) img=m[1];
+   }
+   let desc="";
+   if(e.summary) desc=e.summary.$t;
+   else if(e.content) desc=e.content.$t.replace(/<[^>]*>/g,'').substring(0,150);
+
+   let categories = e.category? e.category.map(c=>c.term.toLowerCase()) : [];
+   let tags = categories.join(' ') + ' ' + title.toLowerCase();
+
+   return {title,link,img,desc,tags};
+ });
+
+ buildHero();
+ showPosts(posts);
+ showRows();
+ startHeroAuto();
+}
+
+/* HERO CAROUSEL */
+function buildHero(){
+ heroSlides = posts.slice(0,3);
+ let heroDiv = document.getElementById("hero");
+ let dotsDiv = document.getElementById("heroDots");
+
+ heroDiv.querySelectorAll('.hero-slide').forEach(el=>el.remove());
+ dotsDiv.innerHTML = '';
+
+ heroSlides.forEach((p,i)=>{
+   let slide = document.createElement("div");
+   slide.className = "hero-slide" + (i===0?" active":"");
+   slide.innerHTML = `
+    <img src="${p.img}">
+    <div class="hero-gradient"></div>
+    <div class="hero-content">
+      <div class="hero-title">${p.title}</div>
+      <div class="hero-desc">${p.desc || "Watch the latest episodes now on MK TV"}</div>
+      <div class="hero-buttons">
+        <button class="hero-btn" onclick="handleClick('${p.link}')">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          START WATCHING
+        </button>
+        <button class="hero-btn hero-btn-secondary" onclick="handleClick('${p.link}')">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          ADD TO LIST
+        </button>
+      </div>
+    </div>
+   `;
+   heroDiv.insertBefore(slide, dotsDiv);
+
+   let dot = document.createElement("div");
+   dot.className = "hero-dot" + (i===0?" active":"");
+   dot.onclick = ()=>goToSlide(i);
+   dotsDiv.appendChild(dot);
+ });
+}
+
+function goToSlide(n){
+ let slides = document.querySelectorAll('.hero-slide');
+ let dots = document.querySelectorAll('.hero-dot');
+ if(!slides.length) return;
+ slides[currentSlide].classList.remove('active');
+ dots[currentSlide].classList.remove('active');
+ currentSlide = n;
+ slides[currentSlide].classList.add('active');
+ dots[currentSlide].classList.add('active');
+ resetHeroAuto();
+}
+
+function nextSlide(){
+ if(heroSlides.length) goToSlide((currentSlide+1) % heroSlides.length);
+}
+
+function startHeroAuto(){
+ clearInterval(slideInterval);
+ slideInterval = setInterval(nextSlide, 5000);
+}
+
+function resetHeroAuto(){
+ startHeroAuto();
+}
+
+/* POSTS GRID */
+function showPosts(list){
+ let box=document.getElementById("posts");
+ box.innerHTML="";
+ list.forEach(p=>{
+  box.innerHTML+=`
+   <div class="card" onclick="handleClick('${p.link}')">
+    <img src="${p.img}">
+    <div class="card-content">
+      <div class="card-title">${p.title}</div>
+      <div class="card-meta">Series • Sub|Dub</div>
+    </div>
+   </div>
+  `;
+ });
+}
+
+/* FILTER ROWS BY TAGS */
+function showRows(){
+ let animeRow=document.getElementById("animeRow");
+ let movieRow=document.getElementById("movieRow");
+ let seriesRow=document.getElementById("seriesRow");
+ animeRow.innerHTML="";
+ movieRow.innerHTML="";
+ seriesRow.innerHTML="";
+
+ posts.forEach(p=>{
+  let cardHTML = `
+   <div class="card" onclick="handleClick('${p.link}')">
+    <img src="${p.img}">
+    <div class="card-content">
+      <div class="card-title">${p.title}</div>
+    </div>
+   </div>
+  `;
+
+  if(p.tags.includes('anime')){
+    animeRow.innerHTML += cardHTML;
+  } else if(p.tags.includes('movie') || p.tags.includes('film')){
+    movieRow.innerHTML += cardHTML;
+  } else if(p.tags.includes('series') || p.tags.includes('tv') || p.tags.includes('show')){
+    seriesRow.innerHTML += cardHTML;
+  }
+ });
+}
+
+/* SEARCH */
+let searchInput = document.getElementById("search");
+searchInput.oninput=function(){
+ let v=this.value.toLowerCase();
+ if(v.length > 0){
+   let filtered = posts.filter(p=>p.title.toLowerCase().includes(v) || p.tags.includes(v));
+   showPosts(filtered);
+   document.getElementById("posts").scrollIntoView({behavior:'smooth'});
+ } else {
+   showPosts(posts);
+ }
+};
+
+function toggleSearch(){
+  searchInput.classList.toggle('active');
+  if(searchInput.classList.contains('active')){
+    setTimeout(()=>searchInput.focus(),300);
+  }else{
+    searchInput.value='';
+    showPosts(posts);
+  }
+}
+
+function scrollToGrid(){
+  document.getElementById("posts").scrollIntoView({behavior:'smooth'});
+}
+
+/* AD SYSTEM */
+function handleClick(link){
+ let popup=document.getElementById("adPopup");
+ popup.style.display="flex";
+ let time=15;
+ let btn=document.getElementById("closeBtn");
+ btn.style.display="none";
+ document.getElementById("count").innerText="Please wait 15s";
+
+ let inter=setInterval(()=>{
+   time--;
+   document.getElementById("count").innerText="Please wait "+time+"s";
+   if(time<=0){
+     clearInterval(inter);
+     btn.style.display="block";
+     btn.disabled=false;
+   }
+ },1000);
+
+ btn.onclick=function(){
+   window.open(link,'_blank');
+   popup.style.display="none";
+ };
+}
+
+/* LOAD BLOGGER FEED */
+let s=document.createElement("script");
+s.src=blog+"/feeds/posts/default?alt=json-in-script&callback=loadPosts&max-results=50";
+document.body.appendChild(s);
+
+</script>
+
+</body>
+</html>
